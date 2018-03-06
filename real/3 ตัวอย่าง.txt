@@ -1,0 +1,23 @@
+> 1+(2*(3+-4)) \ 2h
+= 1
+> PUSH $acc
+> PUSH $acc
+> SHOW $top
+= 1
+> SHOW $size
+= 2
+> POP $rA
+> POP $rB
+> $rA^$rB+$acc
+= 2
+> LOAD $acc $rZ
+> SHOW $rZ
+= 2
+> POP $rY
+! ERROR
+> SHOW $rY
+= 0
+> LOAD $rB $size
+! ERROR
+> LOAD $top $rX
+! ERROR
