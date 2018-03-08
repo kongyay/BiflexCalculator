@@ -52,20 +52,21 @@ extern int yydebug;
     T_SHOW = 262,
     T_LOAD = 263,
     T_REG = 264,
-    T_AND = 265,
-    T_OR = 266,
-    T_NOT = 267,
-    T_MOD = 268,
-    T_POW = 269,
+    T_NEWLINE = 265,
+    T_QUIT = 266,
+    ERR = 267,
+    T_AND = 268,
+    T_OR = 269,
     T_PLUS = 270,
     T_MINUS = 271,
     T_MULTIPLY = 272,
     T_DIVIDE = 273,
-    T_LEFT = 274,
-    T_RIGHT = 275,
-    T_NEWLINE = 276,
-    NEG = 277,
-    ARG = 278
+    T_MOD = 274,
+    T_NOT = 275,
+    T_LEFT = 276,
+    T_RIGHT = 277,
+    NEG = 278,
+    T_POW = 279
   };
 #endif
 
