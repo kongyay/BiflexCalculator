@@ -56,10 +56,11 @@ line: 		T_NEWLINE
 			| T_POP T_NEWLINE							{ yyerror("Usage: POP $<src reg.> $<dest. reg.>"); 		yyerrok; 	}
 
 			
-			| T_LEFT expression error T_NEWLINE  %prec ERR	{ yyerror("Missing Right Paren"); 	yyerrok;			} 
-			| error expression T_RIGHT 						{ yyerror("Missing Left Paren"); 	yyerrok;			}
-			| T_LEFT error T_NEWLINE 						{ yyerror("Missing Right Paren"); 	yyerrok;			} 
-			| error T_RIGHT 								{ yyerror("Missing Left Paren"); 	yyerrok;			}
+			| T_LEFT expression error T_NEWLINE  %prec ERR	{ yyerror("Missing Right Parenthesis"); 	yyerrok;			} 
+			| error expression T_RIGHT 						{ yyerror("Missing Left Parenthesis"); 	yyerrok;			}
+			| T_LEFT error T_NEWLINE 						{ yyerror("Missing Right Parenthesis"); 	yyerrok;			} 
+			| error T_RIGHT 								{ yyerror("Missing Left Parenthesis"); 	yyerrok;			}
+			| expression error expression T_NEWLINE %prec ERR		{ yyerror("Missing Operator"); 			yyerrok;	} 
 ;
 
 expression: NUM										{ $$ = $1; 					}
@@ -68,16 +69,15 @@ expression: NUM										{ $$ = $1; 					}
 	 		| expression T_PLUS expression			{ $$ = $1 + $3; 			}
 			| expression T_MINUS expression			{ $$ = $1 - $3; 			}
 			| expression T_MULTIPLY expression		{ $$ = $1 * $3; 			}
-			| expression T_DIVIDE expression	 	{ if($3!=0) $$ = $1/$3; else {$$ = $1; 	yyerror("Can't Divide by zero, Skip operation.");}			}
+			| expression T_DIVIDE expression	 	{ if($3!=0) $$ = $1/$3; else {$$ = $1; 	yyerror("Cannot Divide by zero, Result skips /0 calculation");}		}
+			| expression T_MOD expression	 		{ if($3!=0) $$ = $1%$3; else {$$ = $1;	yyerror("Cannot Divide by zero, Result skips \\0 calculation");}	}
 			| expression T_POW expression	 		{ $$ = (int)pow($1, $3); 	}
-			| expression T_MOD expression	 		{ if($3!=0) $$ = $1%$3; else {$$ = $1;	yyerror("Can't Divide by zero, Skip operation.");}		}
 			| expression T_AND expression	 		{ $$ = $1 & $3; 			}
 			| expression T_OR expression	 		{ $$ = $1 | $3; 			}
 			| T_NOT expression	 					{ $$ = ~$2; 				}
 			| T_LEFT expression T_RIGHT				{ $$ = $2; 					}
-
-			| expression expression %prec ERR		{ $$ = $1; yyerror("Missing Operator"); 			yyerrok;			} 
 			| T_MINUS expression  %prec NEG 		{ $$ = -$2; 				}
+
 			
 
 			
