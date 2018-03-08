@@ -6,7 +6,7 @@
 #define YY_DECL int yylex()
 
 #include "grammar.tab.h"
-extern int yyerror(const char* s);
+extern void yyerror(const char* s,...);
 int convHex(char* input);
 %}
 
@@ -37,7 +37,7 @@ int convHex(char* input);
 "$top"|"$TOP"       {yylval = 27; return T_REG;}
 "$size"|"$SIZE"     {yylval = 28; return T_REG;}
 "$"[rR][A-Za-z]     {yylval = yytext[2]; return T_REG;}
-"$"[^ \n]+          {yyerror("Invalid Register");}
+"$"[^ \n]+          {yyerror("Invalid Register \'%s\' ",yytext);}
 
 [Qq][Uu][Ii][Tt]    {return T_QUIT;}
 [Ee][Xx][Ii][Tt]    {return T_QUIT;}
@@ -47,9 +47,8 @@ int convHex(char* input);
 "("[ ]*")"		    {} //ignore empty ( )
 \n		            {return T_NEWLINE;}
 [ \t]	            {} // ignore whitespace          
-.                   {yyerror("Invalid character"); }
+.                   {yyerror("Invalid character \'%s\' ",yytext); }
 %%
-//..+	                { printf("Invalid phrase: %s\n",yytext); } // ignore whitespace
 int convHex(char* input) {
     char* p = input;
     while(*p != 'h' && *p != 'H') {
